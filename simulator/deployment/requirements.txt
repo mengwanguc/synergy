@@ -18,5 +18,5 @@ preconditions
 psutil
 seaborn
 setproctitle
-sklearn
+scikit-learn
 numa
