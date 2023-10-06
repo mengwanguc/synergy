@@ -79,7 +79,7 @@ CREATE_RUNNER="YES" sudo ./build.sh
 
 ## Option 2: use the compiled docker provided:
 ```
-docker pull jayashreemohan/synergy_dali:latest
+sudo docker pull jayashreemohan/synergy_dali:latest
 ```
 
 # Run the docker
@@ -89,5 +89,32 @@ sudo docker run --runtime=nvidia --ipc=host --mount src=/,target=/datadrive/,typ
 ```
 
 
+# Run VSCode on the docker
+
+Install the "Dev Containers" extension.
+
+Press "F1", and search for command "Dev Containers: Attach to a running container"
+
+
 # Run Synergy inside the docker
 
+# Set up SSH key
+
+```
+ssh-keygen -t rsa -b 4096
+```
+
+```
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+cat ~/.ssh/id_rsa.pub
+```
+Copy and paste into: https://github.com/settings/keys
+
+
+# Clone the synergy repo
+
+```
+git clone https://github.com/msr-fiddle/synergy.git
+cd synergy/simulator/deployment
+make
+```
