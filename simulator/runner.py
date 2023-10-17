@@ -416,7 +416,7 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
     #scheduler_name = ['DRF-Greedy', 'DRF-Tune']
 
     # jobs_per_hours = np.arange(5, 10, 1)
-    jobs_per_hours = np.arange(10, 12, 1)
+    jobs_per_hours = np.arange(7, 12, 1)
     #jobs_per_hours = np.arange(0.5, 8.5, 0.5)
     
     class_split=[(20,70,10)]
@@ -511,7 +511,7 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
                     logger.info("Task split (runnable) : image={}, lang={}, speech={}".format(*runnable_task_split))
                     logger.info("Task split (overall) : image={}, lang={}, speech={}".format(*overall_task_split))
 
-``
+
                 total_gpu_demand_collection.put(
                     index, total_gpu_demand)
                 job_completion_times_collection.put(
