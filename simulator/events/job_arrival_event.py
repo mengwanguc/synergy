@@ -12,6 +12,11 @@ class JobArrivalEvent(ClusterEvent):
 
     def handleEvent(self):
         super().handleEvent()
+
+        runner = ClusterEvent.runner
+        self.logger.info(" time: {}    JobArrivalEvent.handleEvent. total runnable jobs count: {}".format(
+                runner.get_time(), len(runner.total_runnable_jobs)))
+
         ClusterEvent.runner.start_job(self.job)
         if ClusterEvent.runner.simulate and ClusterEvent.runner.trace is None:
      

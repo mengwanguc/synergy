@@ -114,7 +114,8 @@ Copy and paste into: https://github.com/settings/keys
 # Clone the synergy repo
 
 ```
-git clone https://github.com/msr-fiddle/synergy.git
-cd synergy/simulator/deployment
+cd ~
+git clone git@github.com:mengwanguc/synergy.git
+cd ~/synergy/simulator/deployment
 make
 ```

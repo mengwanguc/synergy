@@ -36,6 +36,8 @@ class Workload:
         self.logger = logging.getLogger(__name__)
         self.trace = trace
 
+        print("Meng: trace: {}".format(trace))
+
         if trace is not None:
             self.workload_type = "replay"
         elif cluster_job_log is None:
@@ -72,6 +74,7 @@ class Workload:
         self.philly_arrival = philly_arrival
 
         if self.workload_type == "philly":
+            print("workload is philly")
             self.jobs = self.get_philly_jobs(cluster_job_log, sum_attempts, exponential, multigpu, debug_multi, small_trace)
             self.total_jobs = len(self.jobs)
             self.logger.info("Total Jobs in Philly Trace: %s, Exponential=%s, multigpu=%s, debug_multi=%s", self.total_jobs, exponential, multigpu, debug_multi)
@@ -103,6 +106,7 @@ class Workload:
 
     def get_philly_jobs(self, cluster_job_log, sum_attempts, exponential=False, multigpu=False, debug_multi=False, small_trace=False):
         jobs = []
+        print("Meng: get_philly_jobs. sum_attempts: {}".format(sum_attempts))
         if not sum_attempts:
             if small_trace and not multigpu:
                 fname = "philly_jobs_no_sum_attempts_static_single.pickle"
@@ -163,6 +167,7 @@ class Workload:
                 pickle.dump(
                     jobs, open(fname, "wb"))
         
+        print(len(jobs))
         return jobs
 
     
@@ -248,6 +253,8 @@ class Workload:
         # For philly workloads alone, set #iterations
         # Num Iteration is fixed assuming consolidated fair-share job [1s per-iter dur]
         if job.iter_is_duration:
+            self.logger.info("job_model: {}  job.job_total_iteration: {}  job_model.iteration_time: {}".format(
+                    job_model, job_model.iteration_time, job.job_total_iteration))
             job.job_total_iteration = int(job.job_total_iteration/job.job_iteration_time)
             
 

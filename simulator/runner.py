@@ -57,11 +57,11 @@ class Runner:
         cluster_job_log,
         scheduler='SRTF',
         jobs_per_hour=5,
-        #series_id_filter=(15, 40),
+        series_id_filter=(1, 100),
         #series_id_filter=(1, 7999),
         #series_id_filter=(3000, 4000),
-        series_id_filter=(4000, 5000),
-        #series_id_filter=(25, 50),
+        # series_id_filter=(4000, 5000),
+        # series_id_filter=(25, 40),
         model_class_split=(34,33,33),
         exponential=True,
         philly_arrival=False,
@@ -184,6 +184,9 @@ class Runner:
             per_server_size=self.cluster.per_server_size,
             num_jobs_default=self.num_jobs_default,
             trace=trace)
+
+        print("scheduler: {}".format(scheduler))
+
         self.scheduler = globals()[scheduler](
             round_duration=round_duration, 
             placement=placement, 
@@ -194,6 +197,7 @@ class Runner:
         
         self.event_queue = EventQueue()
         
+        print("simulate: {}".format(simulate))
         self.init_event_queue(simulate=self.simulate)
 
         self.series_id_filter = series_id_filter
@@ -220,6 +224,8 @@ class Runner:
         self.cluster_demand = ClusterUtilization(self.max_servers, name="demand")
         #print(self.cluster.alloc_stats)
 
+        print("num_jobs_so_far: {}".format(self.num_jobs_so_far))
+        print("runnable jobs: {}".format(self.runnable_jobs))
 
 
     def remove_finished_jobs(self):
@@ -237,6 +243,9 @@ class Runner:
             #    self.logger.info("Time: {:.2f}, Queue: {}".format(self.get_time(), self.event_queue))
             event.handleEvent()
             num_events += 1
+        self.logger.info("self.event_queue.empty(): {}  self.terminate: {}".format(
+            self.event_queue.empty(), self.terminate
+        ))
         return self.get_stats()
 
     def run_deployment(self):
@@ -276,6 +285,7 @@ class Runner:
     
     def add_next_job(self, arrival=-1):
         job = self.workload.generate_next_job(self.get_time(), arrival=arrival)
+        self.logger.info("add_next_job")
         self.add_event(JobArrivalEvent(job.job_arrival_time, job))
         self.num_jobs_so_far += 1
         if self.record_trace:
@@ -300,6 +310,7 @@ class Runner:
 
                 self.add_event(ScheduleEvent(1, self.scheduler))
             else:
+                print("Dynamic workload")
                 self.logger.info("Dynamic workload")
                 self.add_next_job()
                 self.add_event(ScheduleEvent(0, self.scheduler))
@@ -334,6 +345,7 @@ class Runner:
     def set_time(self, time):
         self.time = time
         if self.time_limit > 0 and self.time > self.time_limit:
+            self.logger.info("terminate due to time limit")
             self.terminate = True
 
     def get_runnable_jobs(self):
@@ -378,6 +390,7 @@ class Runner:
         #self.logger.info("[{}] : Finished {}:{} at {:.2f}hrs, arrival:{:.2f}hrs, iter={:.2f}s, num_iter={}".format(job.job_id, str(job), job.job_model.model_name, self.time/3600, job.job_arrival_time/3600, job.job_iteration_time, job.job_total_iteration))
         if self.is_measurement_complete(job.job_id):
             self.logger.info("Terminating workload at {:.2f} hrs : last job ID {}, total finished {}, pending {}".format(self.time/3600, job.job_id, len(self.finished_jobs),len(self.runnable_jobs)))
+            self.logger.info("terminate due to self.is_measurement_complete(job.job_id)")
             self.terminate = True
 
 def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=False, 
@@ -390,19 +403,20 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
         os.makedirs(plot_dir)
 
     # Testing
-    schedulers = ['FIFO+fair']
-    scheduler_name = ['FIFO-Fair']
+    # schedulers = ['FIFO+fair']
+    # scheduler_name = ['FIFO-Fair']
 
     # Intro
-    #schedulers = ['LAS+fair' , 'LAS+tune', 'SRTF+fair', 'SRTF+tune']
-    #scheduler_name = ['LAS-Fair', 'LAS-Tune', 'SRTF-Fair', 'SRTF-Tune']
+    schedulers = ['LAS+fair' , 'LAS+tune', 'SRTF+fair', 'SRTF+tune']
+    scheduler_name = ['LAS-Fair', 'LAS-Tune', 'SRTF-Fair', 'SRTF-Tune']
 
     #schedulers = ['TETRIS', 'TETRIS+tune']
     #scheduler_name = ['TETRIS', 'TETRIS-tune']
     #schedulers = ['DRF', 'DRF+tune']
     #scheduler_name = ['DRF-Greedy', 'DRF-Tune']
 
-    jobs_per_hours = np.arange(9.0, 10, 1)
+    # jobs_per_hours = np.arange(5, 10, 1)
+    jobs_per_hours = np.arange(10, 12, 1)
     #jobs_per_hours = np.arange(0.5, 8.5, 0.5)
     
     class_split=[(20,70,10)]
@@ -473,6 +487,7 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
                         record_trace=record_trace,
                         rec_trace_file=rec_trace,
                         trace=trace)
+                    # return
                     if simulate:
                         (total_gpu_demand, job_completion_times) = runner.run_simulation()
                     else:
@@ -496,7 +511,7 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
                     logger.info("Task split (runnable) : image={}, lang={}, speech={}".format(*runnable_task_split))
                     logger.info("Task split (overall) : image={}, lang={}, speech={}".format(*overall_task_split))
 
-
+``
                 total_gpu_demand_collection.put(
                     index, total_gpu_demand)
                 job_completion_times_collection.put(

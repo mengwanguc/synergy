@@ -33,8 +33,14 @@ def parse_jobs_full(path, sum_attempts=False, exponential=False, multigpu=False,
   # Filter out the jobs with zero attempts or with invalid end times
   data = [j for j in data if len(j["attempts"]) > 0]
 
+
   # First, find min submitted time, use this as t = 0
   first_submitted_time = min([format_time(j["submitted_time"]) for j in data])
+
+  # print("data length: {}  first_submitted_time: {}".format(len(data), first_submitted_time))
+  # data.sort(key = lambda j: format_time(j["submitted_time"]))
+  # print(data[0])
+
 
   # Parse the jobs
   prev_gpu_demand = 0
@@ -164,6 +170,8 @@ def parse_jobs_full(path, sum_attempts=False, exponential=False, multigpu=False,
           job_queueing_delay=queueing_delay,
           cluster_id=cluster_id,
           iter_is_duration=True))
+        
+        
 
         if not exponential and len(jobs) == 8000:
             jobs.sort(key=lambda job: job.job_arrival_time)
@@ -173,6 +181,9 @@ def parse_jobs_full(path, sum_attempts=False, exponential=False, multigpu=False,
                 job.job_arrival_time -= first_arrival
                 logger.info("Job : {}, arr : {:.2f}, iter_time : {}, iters : {}, gpu : {}\n".format(job.job_id, job.job_arrival_time/3600, job.job_iteration_time, job.job_total_iteration, job.job_gpu_demand))
             return jobs
+        
+    # if len(jobs) >= 10:
+    #     break
 
   if not exponential:
       jobs.sort(key=lambda job: job.job_arrival_time)

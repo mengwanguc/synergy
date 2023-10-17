@@ -13,7 +13,11 @@ class ScheduleEvent(ClusterEvent):
 
     def handleEvent(self):
         super().handleEvent()
+        
         runner = ClusterEvent.runner
+        self.logger.info(" time: {}    ScheduleEvent.handleEvent. total runnable jobs count: {}".format(
+                runner.get_time(), len(runner.total_runnable_jobs)))
+
         jobs = runner.runnable_jobs
         gpus = runner.cluster.get_free_gpus()
         
@@ -79,8 +83,10 @@ class ScheduleEvent(ClusterEvent):
 
         if runner.simulate:
             if runner.static and len(runner.runnable_jobs) == 0:
+                self.logger.info("terminate due to runner.static and len(runner.runnable_jobs) == 0")
                 runner.terminate = True
             elif runner.trace is not None and len(runner.runnable_jobs) == 0:
+                self.logger.info("terminate due to runner.trace is not None and len(runner.runnable_jobs) == 0")
                 runner.terminate = True
             else:
                 runner.add_event(ScheduleEvent(next_round_time, self.scheduler))
@@ -88,7 +94,8 @@ class ScheduleEvent(ClusterEvent):
             #cluster run termination condition
             #runner.add_event(ScheduleEvent(next_round_time, self.scheduler))
             if len(runner.runnable_jobs) == 0:
-                runner.terminate =  True
+                self.logger.info("terminate due to len(runner.runnable_jobs) == 0")
+                runner.terminate = True
 
 
         # profile cluster allocation + utilization

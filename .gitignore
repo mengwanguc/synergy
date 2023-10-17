@@ -9,3 +9,5 @@
 **/**/*docker*
 **/**/*cache*
 ./docker/
+simulator/*.pickle
+simulator/out-deploy
