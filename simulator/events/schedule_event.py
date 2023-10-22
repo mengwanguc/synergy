@@ -15,8 +15,8 @@ class ScheduleEvent(ClusterEvent):
         super().handleEvent()
         
         runner = ClusterEvent.runner
-        self.logger.info(" time: {}    ScheduleEvent.handleEvent. total runnable jobs count: {}".format(
-                runner.get_time(), len(runner.total_runnable_jobs)))
+        # self.logger.info(" time: {}    ScheduleEvent.handleEvent. total runnable jobs count: {}".format(
+        #         runner.get_time(), len(runner.total_runnable_jobs)))
 
         jobs = runner.runnable_jobs
         gpus = runner.cluster.get_free_gpus()
@@ -87,6 +87,9 @@ class ScheduleEvent(ClusterEvent):
                 runner.terminate = True
             elif runner.trace is not None and len(runner.runnable_jobs) == 0:
                 self.logger.info("terminate due to runner.trace is not None and len(runner.runnable_jobs) == 0")
+                runner.terminate = True
+            elif runner.num_jobs_default > 0 and len(runner.runnable_jobs) == 0 and len(runner.total_runnable_jobs) > 0:
+                self.logger.info("terminate due to runner.num_jobs_default > 0 and len(runner.runnable_jobs) == 0 and len(runner.total_runnable_jobs) > 0")
                 runner.terminate = True
             else:
                 runner.add_event(ScheduleEvent(next_round_time, self.scheduler))

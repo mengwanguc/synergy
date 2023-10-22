@@ -357,7 +357,9 @@ class Runner:
                 return job
 
     def start_job(self, job):
-        self.logger.info("[{}] : Starting at {:.2f}s, arr = {:.2f}, dur = {:.2f}".format(str(job), (time.time()-self.real_start_time), job.job_arrival_time/3600, job.job_iteration_time*job.job_total_iteration))
+        self.logger.info("[{}] : Starting at {:.2f}s, arr = {:.2f}, dur = {:.2f}. len(runnable_jobs): {}".format(
+                str(job), (time.time()-self.real_start_time), job.job_arrival_time/3600, job.job_iteration_time*job.job_total_iteration,
+                len(self.runnable_jobs)))
         self.runnable_jobs.append(job)
         self.total_runnable_jobs.put_delta(self.time, 1, job.job_id)
         self.workload.add_runnable_job(job.job_class_id)
@@ -386,7 +388,9 @@ class Runner:
             self.time - job.job_arrival_time,
             job.job_id)
 
-        self.logger.info("[{}] : Finished {} at {:.2f}hrs, arrival:{:.2f}hrs, iter={:.2f}s, num_iter={}".format(job.job_id, job.job_model.model_name, self.time/3600, job.job_arrival_time/3600, job.job_iteration_time, job.job_total_iteration))
+        self.logger.info("[{}] : Finished {} at {:.2f}hrs, arrival:{:.2f}hrs, iter={:.2f}s, num_iter={} len(self.runnable_jobs){}".format(
+                job.job_id, job.job_model.model_name, self.time/3600, job.job_arrival_time/3600, job.job_iteration_time, 
+                job.job_total_iteration, len(self.runnable_jobs)))
         #self.logger.info("[{}] : Finished {}:{} at {:.2f}hrs, arrival:{:.2f}hrs, iter={:.2f}s, num_iter={}".format(job.job_id, str(job), job.job_model.model_name, self.time/3600, job.job_arrival_time/3600, job.job_iteration_time, job.job_total_iteration))
         if self.is_measurement_complete(job.job_id):
             self.logger.info("Terminating workload at {:.2f} hrs : last job ID {}, total finished {}, pending {}".format(self.time/3600, job.job_id, len(self.finished_jobs),len(self.runnable_jobs)))
@@ -403,12 +407,12 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
         os.makedirs(plot_dir)
 
     # Testing
-    # schedulers = ['FIFO+fair']
-    # scheduler_name = ['FIFO-Fair']
+    schedulers = ['FIFO+fair']
+    scheduler_name = ['FIFO-Fair']
 
     # Intro
-    schedulers = ['LAS+fair' , 'LAS+tune', 'SRTF+fair', 'SRTF+tune']
-    scheduler_name = ['LAS-Fair', 'LAS-Tune', 'SRTF-Fair', 'SRTF-Tune']
+    # schedulers = ['LAS+fair' , 'LAS+tune', 'SRTF+fair', 'SRTF+tune']
+    # scheduler_name = ['LAS-Fair', 'LAS-Tune', 'SRTF-Fair', 'SRTF-Tune'9]
 
     #schedulers = ['TETRIS', 'TETRIS+tune']
     #scheduler_name = ['TETRIS', 'TETRIS-tune']
@@ -416,7 +420,8 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
     #scheduler_name = ['DRF-Greedy', 'DRF-Tune']
 
     # jobs_per_hours = np.arange(5, 10, 1)
-    jobs_per_hours = np.arange(7, 12, 1)
+    # jobs_per_hours = np.arange(7, 12, 1)
+    jobs_per_hours = np.arange(9, 10, 1)
     #jobs_per_hours = np.arange(0.5, 8.5, 0.5)
     
     class_split=[(20,70,10)]
