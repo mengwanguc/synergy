@@ -119,3 +119,9 @@ git clone git@github.com:mengwanguc/synergy.git
 cd ~/synergy/simulator/deployment
 make
 ```
+
+
+```
+python runner.py --cluster_job_log trace/cluster_job_log --num-jobs-default 2 --plot 2>&1 | tee  out.log
+python runner.py --cluster_job_log trace/cluster_job_log --num-jobs-default 2 --no_simulate --plot 2>&1 | tee  out.log
+```
