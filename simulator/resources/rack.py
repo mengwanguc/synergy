@@ -51,13 +51,18 @@ class Rack():
     def create_servers(self, custom=False):
  
          simulate = True
+         self.logger.info("self.conn_list: {}".format(self.conn_list))
          if self.conn_list is not None:
              simulate = False
              if os.path.exists(self.conn_list):
                  ip_port_list = open(self.conn_list, 'r').read().splitlines()
                  ip_port_list = [(item.split(',')) for item in ip_port_list] 
                  if len(ip_port_list) != self.num_servers:
-                     raise ValueError("Mismatch in server IP list") 
+                    self.logger.info("len(ip_port_list): {}  self.num_servers: {}".format(
+                        len(ip_port_list), self.num_servers
+                    ))
+                    raise ValueError("Mismatch in server IP list") 
+                 self.logger.info("ip_port_list: {}".format(ip_port_list))
 
 
          if self.start_server_id is None:
@@ -70,6 +75,8 @@ class Rack():
          gpu_id = self.start_gpu_id
 
          servers = []
+
+         
 
          for i in range(self.num_servers):
              if simulate:

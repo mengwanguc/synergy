@@ -125,9 +125,9 @@ class DataSeries:
                .plot(x = self.name[1], y = 'cdf', grid = True, linewidth=2,  marker='o', markersize=2, markerfacecolor='red', markeredgecolor='red')
         ax.set_ylabel('cdf')
         ax.set_xlabel(self.name[1])
-        plt.xscale("log", basex=2)
+        # plt.xscale("log", basex=2)
         plt.gcf().autofmt_xdate()
-        fname='/' + prefix + '_cdf.png'
+        fname='/' + prefix + '_acdf.png'
         plt.savefig(path + fname)
         plt.close()
         fname= path + '/' + prefix +  ".csv"
@@ -254,10 +254,11 @@ class DataSeriesCollection:
                 print("99.9th = ", df[df.columns[1]].quantile(0.999)/3600)
                 #print("99.99th = ", df[df.columns[1]].quantile(0.9999)/3600)
             #plt.xscale("log")
-            plt.xscale("log", basex=2)
-            plt.legend(bbox_to_anchor=(1.01, 1), loc='upper left', ncol=2)
+            # plt.xscale("log", basex=2)
+            plt.legend(loc='bottom right', ncol=1)
             plt.gcf().autofmt_xdate()
-            plt.title("CDF of JCT for load = " + str(np.round(group_name, 1)) + " jobs/hour")
+            # plt.title("CDF of JCT for load = " + str(np.round(group_name, 1)) + " jobs/hour")
+            plt.title("CDF of JCT for 20 static jobs")
             plt.savefig(path + "cdf_jct_load_"+str(np.round(group_name, 1))+".png", bbox_inches='tight', pad_inches=0.1, dpi=500)
             plt.close()
             c = [xvalues, means]

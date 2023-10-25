@@ -316,6 +316,8 @@ class Runner:
                 self.add_event(ScheduleEvent(0, self.scheduler))
         else:
             #Add all jobs from workload file, static arrival
+            self.logger.info("init_event_queue not simulate")
+            # self.logger.info("workload.jobs: {}".format(self.workload.jobs))
             for job in self.workload.jobs:
                 self.add_event(JobArrivalEvent(job.job_arrival_time, job))
             self.add_event(AllocationEvent(self.get_time(), self.scheduler))
@@ -407,12 +409,18 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
         os.makedirs(plot_dir)
 
     # Testing
-    schedulers = ['FIFO+fair']
-    scheduler_name = ['FIFO-Fair']
+    # schedulers = ['FIFO+fair']
+    # scheduler_name = ['FIFO-Fair']
+
+    # schedulers = ['FIFO+fair', 'FIFO+tune']
+    # scheduler_name = ['FIFO-Fair', 'FIFO-tune']
+
+    schedulers = ['LAS+fair' , 'LAS+tune']
+    scheduler_name = ['LAS-Fair', 'LAS-Tune']
 
     # Intro
     # schedulers = ['LAS+fair' , 'LAS+tune', 'SRTF+fair', 'SRTF+tune']
-    # scheduler_name = ['LAS-Fair', 'LAS-Tune', 'SRTF-Fair', 'SRTF-Tune'9]
+    # scheduler_name = ['LAS-Fair', 'LAS-Tune', 'SRTF-Fair', 'SRTF-Tune']
 
     #schedulers = ['TETRIS', 'TETRIS+tune']
     #scheduler_name = ['TETRIS', 'TETRIS-tune']
@@ -424,7 +432,8 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
     jobs_per_hours = np.arange(9, 10, 1)
     #jobs_per_hours = np.arange(0.5, 8.5, 0.5)
     
-    class_split=[(20,70,10)]
+    # class_split=[(20,70,10)]
+    class_split = [(100,0,0)]
     #class_split=[(20,70,10), (33,33,33), (50,0,50)]
 
     agg_total_gpu_demand_collection = DataSeriesCollection()
@@ -547,7 +556,7 @@ def parser():
     parser.add_argument('--seed', default=42, type=int)
 
     # If not gicven cluster log, this is the number of jobs generated
-    parser.add_argument('--num-jobs-default', default=0, type=int)
+    parser.add_argument('--num_jobs_default', default=0, type=int)
     # related to philly trace
     parser.add_argument('--cluster_job_log', default=None, type=str)
     # sum attempts duration by default

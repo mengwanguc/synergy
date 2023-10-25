@@ -22,6 +22,7 @@ class DeployEvent(ClusterEvent):
         job_ids_this_round = self.scheduler.running_job_ids
         #jobs = self.scheduler.running_jobs
         jobs = self.scheduler.running_jobs
+        self.logger.info("running_jobs: {}".format(self.scheduler.running_jobs))
         self.logger.info("Sched status prior to deploy : {}".format(runner.done_sched_next_round._value))
 
         if len(runner.runnable_jobs) == 0:
@@ -87,7 +88,7 @@ class DeployEvent(ClusterEvent):
             runner.deploy_ongoing.inc()
             self.logger.info("Jobs to deploy : ")
             for job in jobs_to_run:
-                self.logger.info(str(job))
+                self.logger.info("    {}".format(str(job)))
 
             self.logger.info("Job Lease Status : {}".format(runner.job_lease_status))
             self.scheduler.deploy_jobs_round(jobs_to_run)

@@ -2,9 +2,9 @@ from enum import Enum
 import logging
 from resources.cluster import AllocationStrategy
 import sys
-#from deployment.synergy_iterator import SynergyIterator 
-#from deployment.runtime.rpc.scheduler_client import JobDescription 
-#from deployment.helper import get_self_ip, list_as_string 
+from deployment.synergy_iterator import SynergyIterator 
+from deployment.runtime.rpc.scheduler_client import JobDescription 
+from deployment.helper import get_self_ip, list_as_string 
 import os
 import copy
 import time
@@ -250,12 +250,13 @@ class Scheduler:
         job.cpu_ids[server.server_id] = cpu_ids
         job_alloc_version.cpu_ids[server.server_id] = cpu_ids
 
-        self.logger.debug("Info for job {} and server {}".format(job.job_id, server.server_id))
-        self.logger.debug(gpu_ids) 
-        self.logger.debug("Num GPU={}".format(serv_job_res['gpu']))
-        self.logger.debug("Num CPU={}".format(serv_job_res['cpu']))
-        self.logger.debug("Num mem={}".format(serv_job_res['mem']))
-        self.logger.debug("Num sspeed={}".format(serv_job_res['sspeed']))
+        self.logger.info("Info for job {} and server {}".format(job.job_id, server.server_id))
+        self.logger.info(gpu_ids) 
+        self.logger.info("Num GPU={}".format(serv_job_res['gpu']))
+        self.logger.info("Num CPU={}".format(serv_job_res['cpu']))
+        self.logger.info("Num mem={}".format(serv_job_res['mem']))
+        self.logger.info("Num sspeed={}".format(serv_job_res['sspeed']))
+
         new_env[SYNERGY_CPU_THIS_SERVER] = str(serv_job_res['cpu'])
         new_env[SYNERGY_MEM_THIS_SERVER] = str(serv_job_res['mem'])
         new_env[SYNERGY_GPU_THIS_SERVER] = str(serv_job_res['gpu'])
@@ -266,6 +267,7 @@ class Scheduler:
         new_env[SYNERGY_GPUS_ALLOCATED] = ",".join(list_as_string(gpu_ids))
         new_env[SYNERGY_CPUS_ALLOCATED] = ",".join(list_as_string(cpu_ids))
         new_env[SYNERGY_LOG_DIR] = "./logs/"
+
 
         cmd_script = "./docker_script_singlegpu.sh ./sched-res/  "
 
@@ -280,13 +282,17 @@ class Scheduler:
             cmd_script = "./docker_script_multigpu.sh ./sched-res/  "
 
      
-        self.logger.info("Job {}, iters={}/{}".format(job.job_id, job.job_executed_iteration, job.job_total_iteration))        
+        self.logger.info("Job {}, iters={}/{}".format(job.job_id, job.job_executed_iteration, job.job_total_iteration))  
+        
         cmd = cmd_script + \
               str(get_self_ip()) + \
               " " + \
               str(self.runner.sched_port) + \
               " " + \
               str(job_id)
+            
+        self.logger.info("cmd: {}".format(cmd))
+        self.logger.info("")      
 
         #TODO : Test
         #cmd = "./test_multigpu.sh ./out/ 10.185.12.207 14000 25 "

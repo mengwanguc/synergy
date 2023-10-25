@@ -167,6 +167,7 @@ class Cluster():
             
         servers_per_rack = self.config_map.get('CLUSTER').get('servers_per_rack')
         for rack_id in range(self.config_map.get('CLUSTER').get('racks')):
+            self.logger.info("servers_per_rack: {}".format(servers_per_rack))
             rack = Rack(rack_id, servers_per_rack, server_config=server_config, conn_list=conn_list)
             racks.append(rack)
         return racks

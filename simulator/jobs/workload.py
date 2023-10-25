@@ -254,7 +254,7 @@ class Workload:
         # Num Iteration is fixed assuming consolidated fair-share job [1s per-iter dur]
         if job.iter_is_duration:
             self.logger.info("job_model: {}  job.job_total_iteration: {}  job_model.iteration_time: {}".format(
-                    job_model, job_model.iteration_time, job.job_total_iteration))
+                    job_model, job.job_total_iteration, job_model.iteration_time))
             job.job_total_iteration = int(job.job_total_iteration/job.job_iteration_time)
             
 
