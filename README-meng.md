@@ -1,3 +1,37 @@
+# Set up SSH key
+
+```
+ssh-keygen -t rsa -b 4096
+```
+
+```
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+cat ~/.ssh/id_rsa.pub
+```
+Copy and paste into: https://github.com/settings/keys
+
+# Clone the synergy repo
+
+```
+cd ~
+git clone git@github.com:mengwanguc/synergy.git
+```
+
+# Install required packages
+
+Set up profiler
+
+```
+cd src
+cd profiler; ./prereq.sh; cd ../..
+cd simulator/deployment
+./upgrade_pip.sh
+pip install -r requirements.txt
+make
+```
+
+
+
 # install docker
 
 ```
@@ -98,17 +132,7 @@ Press "F1", and search for command "Dev Containers: Attach to a running containe
 
 # Run Synergy inside the docker
 
-# Set up SSH key
 
-```
-ssh-keygen -t rsa -b 4096
-```
-
-```
-ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-cat ~/.ssh/id_rsa.pub
-```
-Copy and paste into: https://github.com/settings/keys
 
 
 # Install packages
@@ -129,7 +153,7 @@ make
 
 
 ```
-python runner.py --cluster_job_log trace/cluster_job_log --num-jobs-default 2 --plot 2>&1 | tee  out.log
+python runner.py --cluster_job_log trace/cluster_job_log --num_jobs_default 2 --plot 2>&1 | tee  out.log
 python runner.py --cluster_job_log trace/cluster_job_log --num-jobs-default 2 --no_simulate --plot 2>&1 | tee  out.log
 python runner.py --cluster_job_log trace/cluster_job_log --plot --config_file configs/meng_cluster.ini --conn_file configs/machi
 ne_ip_port.txt  --no_use_cache --no_simulate --num_jobs_default 4 2>&1 | tee  out-deploy

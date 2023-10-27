@@ -20,6 +20,7 @@ from resources.server_config import CustomServerConfig
 from resources.rack import Rack
 from jobs.workload import Workload
 
+
 # Schedulers
 from schedulers.fifo_synergy_new import FIFO
 from schedulers.las_synergy_new import LAS
@@ -39,10 +40,12 @@ from events.allocation_event import AllocationEvent
 from events.deploy_event import DeployEvent
 
 #Graphs and metrics
+
 from metrics.stats import DataSeries, DataSeriesCollection
 from metrics.cluster_util import ClusterUtilization
 
 #Runtime
+
 from deployment.runtime.rpc import scheduler_server
 from deployment.runtime.rpc import scheduler_client
 import schedulers.callbacks as scheduler_callbacks
@@ -409,14 +412,14 @@ def benchmark(seed, cluster_job_log, use_cache, cache_result, prioritize, plot=F
         os.makedirs(plot_dir)
 
     # Testing
-    # schedulers = ['FIFO+fair']
-    # scheduler_name = ['FIFO-Fair']
+    schedulers = ['FIFO+fair']
+    scheduler_name = ['FIFO-Fair']
 
     # schedulers = ['FIFO+fair', 'FIFO+tune']
     # scheduler_name = ['FIFO-Fair', 'FIFO-tune']
 
-    schedulers = ['LAS+fair' , 'LAS+tune']
-    scheduler_name = ['LAS-Fair', 'LAS-Tune']
+    # schedulers = ['LAS+fair' , 'LAS+tune']
+    # scheduler_name = ['LAS-Fair', 'LAS-Tune']
 
     # Intro
     # schedulers = ['LAS+fair' , 'LAS+tune', 'SRTF+fair', 'SRTF+tune']

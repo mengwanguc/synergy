@@ -255,7 +255,7 @@ class DataSeriesCollection:
                 #print("99.99th = ", df[df.columns[1]].quantile(0.9999)/3600)
             #plt.xscale("log")
             # plt.xscale("log", basex=2)
-            plt.legend(loc='bottom right', ncol=1)
+            plt.legend(loc='lower right', ncol=1)
             plt.gcf().autofmt_xdate()
             # plt.title("CDF of JCT for load = " + str(np.round(group_name, 1)) + " jobs/hour")
             plt.title("CDF of JCT for 20 static jobs")

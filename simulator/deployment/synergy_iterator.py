@@ -17,7 +17,8 @@ DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 try:
     from nvidia.dali.plugin.pytorch import DALIClassificationIterator
 except:
-    raise ImportError("Please install DALI from https://www.github.com/NVIDIA/DALI to run this example.")
+    # raise ImportError("Please install DALI from https://www.github.com/NVIDIA/DALI to run this example.")
+    pass
 
 class SynergyIterator:
     def __init__(self, \
