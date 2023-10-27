@@ -22,6 +22,7 @@ git clone git@github.com:mengwanguc/synergy.git
 Set up profiler
 
 ```
+cd ~/synergy
 cd src
 cd profiler; ./prereq.sh; cd ../..
 cd simulator/deployment
