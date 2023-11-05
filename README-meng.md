@@ -159,7 +159,7 @@ python runner.py --cluster_job_log trace/cluster_job_log --num-jobs-default 2 --
 python runner.py --cluster_job_log trace/cluster_job_log --plot --config_file configs/meng_cluster.ini --conn_file configs/machi
 ne_ip_port.txt  --no_use_cache --no_simulate --num_jobs_default 4 2>&1 | tee  out-deploy
 
-python runner.py --config_file configs/test_deployment.ini --conn_file configs/machine_ip_port.txt --no_use_cache --no_simulate --num_jobs_default 1 2>&1 | tee out-deploy-synthetic
+python runner.py --config_file configs/test_deployment.ini --conn_file configs/machine_ip_port.config --no_use_cache --no_simulate --num_jobs_default 1 2>&1 | tee out-deploy-synthetic
 
 
 python runner.py --cluster_job_log trace/cluster_job_log --plot --static --small_trace --num_jobs_default 20 --record_trace --no_use_cache --config_file configs/test_deployment.ini 2>&1 | tee static-simulate-fifo-1server-allimage
