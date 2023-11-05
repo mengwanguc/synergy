@@ -48,4 +48,32 @@ class WorkerRpcClient:
                
                 return (response.success, None, None)
 
+    
+    def notify_scheduler(self, worker_id, job_descriptions):
+        # Send a Done message.
+        self._logger.info('hi')
+        self._logger.debug('worker {} notifying scheduler for job {}'.format(
+                        worker_id, job_descriptions))
+        self._logger.debug('start request = w2s_pb2.DoneRequest()')
+        request = w2s_pb2.DoneRequest()
+        self._logger.debug('finished request = w2s_pb2.DoneRequest()')
+        request.worker_id = worker_id
+        for job_description in job_descriptions:
+            request.job_id.append(job_description[0])
+            request.execution_time.append(job_description[1])
+            request.num_steps.append(job_description[2])
+            request.iterator_log.append(job_description[3])
+        with grpc.insecure_channel(self._sched_loc) as channel:
+            self._logger.debug('stub = w2s_pb2_grpc.WorkerToSchedulerStub(channel)')
+            stub = w2s_pb2_grpc.WorkerToSchedulerStub(channel)
+            response = stub.Done(request)
+            job_ids = \
+              [job_description[0] for job_description in job_descriptions]
+            if len(job_ids) == 1:
+              self._logger.info('Notified scheduler that '
+                                 'job {0} has completed'.format(job_ids[0]))
+            else:
+              self._logger.info('Notified scheduler that '
+                                 'jobs {0} have completed'.format(job_ids))
+
  
