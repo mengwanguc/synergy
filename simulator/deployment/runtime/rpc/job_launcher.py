@@ -444,8 +444,8 @@ class JobLauncher:
         # Cleanup and notify the scheduler.
         self._logger.debug('Job {0} has completed, '
                                'notifying scheduler...'.format(job_id))
-        self._worker_rpc_client.notify_scheduler(gpus_this_server,
-                                                job_result)
+        # self._worker_rpc_client.notify_scheduler(gpus_this_server,
+        #                                         job_result)
 
     def dispatch_job(self, job_desc, round_id):
         #self._dispatch_jobs_helper(job_desc, round_id)
