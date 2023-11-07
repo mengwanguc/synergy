@@ -156,8 +156,7 @@ make
 ```
 python runner.py --cluster_job_log trace/cluster_job_log --num_jobs_default 2 --plot 2>&1 | tee  out.log
 python runner.py --cluster_job_log trace/cluster_job_log --num-jobs-default 2 --no_simulate --plot 2>&1 | tee  out.log
-python runner.py --cluster_job_log trace/cluster_job_log --plot --config_file configs/meng_cluster.ini --conn_file configs/machi
-ne_ip_port.txt  --no_use_cache --no_simulate --num_jobs_default 4 2>&1 | tee  out-deploy
+python runner.py --cluster_job_log trace/cluster_job_log --plot --config_file configs/meng_cluster.ini --conn_file configs/machine_ip_port.txt  --no_use_cache --no_simulate --num_jobs_default 4 2>&1 | tee  out-deploy
 
 python runner.py --config_file configs/test_deployment.ini --conn_file configs/machine_ip_port.config --no_use_cache --no_simulate --num_jobs_default 1 2>&1 | tee out-deploy-synthetic
 
@@ -165,4 +164,15 @@ python runner.py --config_file configs/test_deployment.ini --conn_file configs/m
 python runner.py --cluster_job_log trace/cluster_job_log --plot --static --small_trace --num_jobs_default 20 --record_trace --no_use_cache --config_file configs/test_deployment.ini 2>&1 | tee static-simulate-fifo-1server-allimage
 
 python runner.py --plot --static --replay_trace record9_fair --no_use_cache --config_file configs/test_deployment.ini 2>&1 | tee static-simulate-fifo-1server-allimage-replay-simulate
+```
+
+
+
+# Deployment
+
+## On client
+
+## On server
+```
+python launch_worker_server.py -i 10.140.82.38 -s 14000 -w 16000 -g 1 --run_dir ./ --data_dir ./ --checkpoint_dir ./chk/
 ```
